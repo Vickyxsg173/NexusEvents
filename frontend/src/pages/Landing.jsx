@@ -24,7 +24,7 @@ export default function Landing() {
             The Ultimate Event Aggregator
           </div>
           
-          <h1 data-aos="fade-up" data-aos-delay="100" className="text-5xl md:text-7xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-8">
+          <h1 data-aos="fade-up" data-aos-delay="100" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-8">
             Find Your Next <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-purple-600 dark:from-brand-400 dark:to-purple-400">
               Tech Hackathon
