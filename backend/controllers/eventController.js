@@ -74,7 +74,11 @@ exports.getEventById = async (req, res) => {
 // @route   POST /api/events
 exports.createEvent = async (req, res) => {
   try {
-    // In a production app, verify an API key here so only the scraper can insert!
+    // Verify API key so only the scraper can insert
+    const apiKey = req.headers['x-api-secret'];
+    if (!apiKey || apiKey !== process.env.SCRAPER_API_SECRET) {
+      return res.status(401).json({ success: false, message: 'Unauthorized: Invalid or missing API secret' });
+    }
     
     const { tags, ...eventData } = req.body;
 

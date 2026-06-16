@@ -6,22 +6,8 @@ const supabase = require('../config/supabase');
 const startCronJobs = () => {
     console.log("🕒 Cron Service Initialized. Background tasks are running.");
 
-    // 1. Data Harvester: Run scrapers every 12 hours (00:00 and 12:00)
-    cron.schedule('0 0,12 * * *', () => {
-        console.log("🤖 [CRON] Starting Automated Data Harvester...");
-        const scraperDir = path.resolve(__dirname, '../../scraper');
-        
-        // Execute the python script using bash to source the venv properly
-        const command = `cd ${scraperDir} && source venv/bin/activate && python run_all.py`;
-        
-        exec(command, { shell: '/bin/bash' }, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`[CRON ERROR] Harvester Failed: ${error.message}`);
-                return;
-            }
-            console.log(`[CRON SUCCESS] Harvester Completed.\n${stdout}`);
-        });
-    });
+    // Note: The Data Harvester (Scrapers) has been moved to GitHub Actions to run on a free isolated container.
+    // It will ping the /api/events endpoint every 12 hours.
 
     // 2. Database Janitor: Cleanup events older than 10 days, every night at 3:00 AM
     cron.schedule('0 3 * * *', async () => {

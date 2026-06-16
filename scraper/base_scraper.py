@@ -15,7 +15,7 @@ class BaseScraper(ABC):
         self.source_url = source_url
         self.raw_data = []
         self.normalized_data = []
-        self.api_base_url = "http://localhost:5000/api/events"
+        self.api_base_url = os.getenv("API_BASE_URL", "http://localhost:5000/api/events")
         
         # Configure Groq
         api_key = os.getenv("GROQ_API_KEY")
@@ -178,7 +178,10 @@ Return ONLY a valid JSON object with a single key 'events' containing the array 
                 # Pop tags for separate insertion if needed
                 tags = event.pop("tags", [])
                 
-                response = requests.post(self.api_base_url, json=event)
+                headers = {
+                    "x-api-secret": os.getenv("SCRAPER_API_SECRET", "")
+                }
+                response = requests.post(self.api_base_url, json=event, headers=headers)
                 if response.status_code == 201:
                     success_count += 1
                 else:
