@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useTheme } from './ThemeProvider';
-import { Compass, Bookmark, User, LogOut, Home, Menu, X } from 'lucide-react';
+import { Compass, Bookmark, User, LogOut, Home, Menu, X, LayoutDashboard } from 'lucide-react';
 import ThemeToggleSwitch from './ThemeToggleSwitch';
 
 export default function Navbar() {
@@ -26,11 +26,11 @@ export default function Navbar() {
     flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all
     ${isActive(path) 
       ? 'bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400' 
-      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'}
+      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'}
   `;
 
   return (
-    <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
+    <nav className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           
@@ -45,6 +45,11 @@ export default function Navbar() {
               <Link to="/" className={navLinkClass('/')}>
                 <Home className="w-4 h-4 mr-2" /> Home
               </Link>
+              {user && (
+                <Link to="/dashboard" className={navLinkClass('/dashboard')}>
+                  <LayoutDashboard className="w-4 h-4 mr-2" /> Dashboard
+                </Link>
+              )}
               <Link to="/discover" className={navLinkClass('/discover')}>
                 <Compass className="w-4 h-4 mr-2" /> Discover
               </Link>
@@ -78,7 +83,7 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex items-center space-x-3">
-                <Link to="/login" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium text-sm">
+                <Link to="/login" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium text-sm">
                   Sign In
                 </Link>
                 <Link to="/signup" className="px-4 py-2 rounded-full bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium transition-colors shadow-sm">
@@ -92,7 +97,7 @@ export default function Navbar() {
           <div className="flex items-center lg:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-500 transition-colors"
+              className="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-500 transition-colors"
               aria-expanded="false"
             >
               <span className="sr-only">Open main menu</span>
@@ -109,11 +114,16 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-xl absolute w-full left-0 z-40 animate-fade-in-up">
+        <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl absolute w-full left-0 z-40 animate-fade-in-up">
           <div className="px-4 pt-2 pb-3 space-y-1 sm:px-3">
             <Link to="/" onClick={closeMobileMenu} className={`block ${navLinkClass('/')}`}>
               <Home className="w-4 h-4 mr-2" /> Home
             </Link>
+            {user && (
+              <Link to="/dashboard" onClick={closeMobileMenu} className={`block ${navLinkClass('/dashboard')}`}>
+                <LayoutDashboard className="w-4 h-4 mr-2" /> Dashboard
+              </Link>
+            )}
             <Link to="/discover" onClick={closeMobileMenu} className={`block ${navLinkClass('/discover')}`}>
               <Compass className="w-4 h-4 mr-2" /> Discover
             </Link>
@@ -124,9 +134,9 @@ export default function Navbar() {
             )}
           </div>
           
-          <div className="pt-4 pb-4 border-t border-gray-200 dark:border-gray-800">
+          <div className="pt-4 pb-4 border-t border-slate-200 dark:border-slate-800">
             <div className="flex items-center justify-between px-5 mb-4">
-              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Theme</span>
+              <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Theme</span>
               <ThemeToggleSwitch 
                 isDark={isDarkMode} 
                 onToggle={(checked) => setTheme(checked ? 'dark' : 'light')} 
@@ -150,7 +160,7 @@ export default function Navbar() {
                 <Link 
                   to="/login" 
                   onClick={closeMobileMenu}
-                  className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm text-base font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
+                  className="w-full flex justify-center items-center px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg shadow-sm text-base font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700"
                 >
                   Sign In
                 </Link>

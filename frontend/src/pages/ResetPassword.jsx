@@ -35,10 +35,10 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-xl">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Update your password
           </h2>
         </div>
@@ -49,7 +49,7 @@ export default function ResetPassword() {
             </div>
           )}
           <div>
-            <label htmlFor="new-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="new-password" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
               New Password
             </label>
             <input
@@ -58,7 +58,7 @@ export default function ResetPassword() {
               type="password"
               autoComplete="new-password"
               required
-              className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm dark:bg-gray-700 dark:text-white"
+              className="mt-1 appearance-none block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm dark:bg-slate-700 dark:text-white"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

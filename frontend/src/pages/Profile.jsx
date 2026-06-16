@@ -87,18 +87,18 @@ export default function Profile() {
       )}
 
       {showDeleteConfirm && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-gray-900/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden relative flex flex-col p-6">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Delete Account</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-              This action cannot be undone. Please type <span className="font-bold text-gray-900 dark:text-white">{profile?.name}</span> to confirm.
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden relative flex flex-col p-6">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Delete Account</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
+              This action cannot be undone. Please type <span className="font-bold text-slate-900 dark:text-white">{profile?.name}</span> to confirm.
             </p>
             <input 
               type="text" 
               value={deleteConfirmText}
               onChange={(e) => setDeleteConfirmText(e.target.value)}
               placeholder={profile?.name}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-transparent text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 mb-6"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-transparent text-slate-900 dark:text-white focus:ring-2 focus:ring-red-500 mb-6"
             />
             <div className="flex space-x-3">
               <button 
@@ -106,7 +106,7 @@ export default function Profile() {
                   setShowDeleteConfirm(false);
                   setDeleteConfirmText('');
                 }}
-                className="flex-1 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg font-medium transition-colors"
+                className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg font-medium transition-colors"
               >
                 Cancel
               </button>
@@ -122,18 +122,18 @@ export default function Profile() {
         </div>
       )}
       
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
         {/* Header/Cover */}
         <div className="h-32 bg-gradient-to-r from-brand-500 to-brand-700"></div>
         
         <div className="px-8 pb-8 relative">
           {/* Avatar */}
           <div className="absolute -top-16 left-8">
-            <div className="h-32 w-32 rounded-full border-4 border-white dark:border-gray-800 bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+            <div className="h-32 w-32 rounded-full border-4 border-white dark:border-slate-800 bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
               {profile?.profile_photo ? (
                 <img src={profile.profile_photo} alt={name} className="h-full w-full object-cover" />
               ) : (
-                <User className="h-16 w-16 text-gray-400" />
+                <User className="h-16 w-16 text-slate-400" />
               )}
             </div>
           </div>
@@ -142,7 +142,7 @@ export default function Profile() {
             {!isEditing ? (
               <button 
                 onClick={() => setIsEditing(true)}
-                className="flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md transition-colors text-sm font-medium"
+                className="flex items-center px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-md transition-colors text-sm font-medium"
               >
                 <Edit2 className="w-4 h-4 mr-2" />
                 Edit Profile
@@ -156,7 +156,7 @@ export default function Profile() {
                     setBio(profile?.bio || '');
                     setPhotoUrl(profile?.profile_photo || '');
                   }}
-                  className="flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md transition-colors text-sm font-medium"
+                  className="flex items-center px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-md transition-colors text-sm font-medium"
                 >
                   <X className="w-4 h-4 mr-1" /> Cancel
                 </button>
@@ -176,27 +176,27 @@ export default function Profile() {
               {isEditing ? (
                 <div className="space-y-4 max-w-lg">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Full Name</label>
                     <input 
                       type="text" 
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-transparent text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-transparent text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Profile Photo</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Profile Photo</label>
                     <div className="flex space-x-2">
                       <input 
                         type="url" 
                         value={photoUrl}
                         onChange={(e) => setPhotoUrl(e.target.value)}
                         placeholder="https://example.com/avatar.jpg"
-                        className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-transparent text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500"
+                        className="flex-1 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-transparent text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500"
                       />
                       <button 
                         onClick={() => fileInputRef.current?.click()}
-                        className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors flex items-center whitespace-nowrap"
+                        className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors flex items-center whitespace-nowrap"
                       >
                         <Upload className="w-4 h-4 mr-2" /> Upload
                       </button>
@@ -210,32 +210,32 @@ export default function Profile() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Bio</label>
                     <textarea 
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-transparent text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-transparent text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500"
                     />
                   </div>
                 </div>
               ) : (
                 <>
-                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{profile?.name || 'Anonymous User'}</h1>
-                  <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl">{profile?.bio || 'No bio provided yet.'}</p>
+                  <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{profile?.name || 'Anonymous User'}</h1>
+                  <p className="text-slate-600 dark:text-slate-400 mt-2 max-w-2xl">{profile?.bio || 'No bio provided yet.'}</p>
                 </>
               )}
             </div>
 
-            <div className="flex items-center text-gray-500 dark:text-gray-400">
+            <div className="flex items-center text-slate-500 dark:text-slate-400">
               <Mail className="w-4 h-4 mr-2" />
               <span>{user?.email}</span>
             </div>
 
             {/* Interests Section */}
-            <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="pt-6 border-t border-slate-200 dark:border-slate-700">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Your Interests</h3>
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Your Interests</h3>
                 <button 
                   onClick={() => setShowInterestModal(true)}
                   className="text-sm text-brand-600 hover:text-brand-700 font-medium"
@@ -256,11 +256,11 @@ export default function Profile() {
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 text-sm">You haven't selected any interests yet.</p>
+                <p className="text-slate-500 text-sm">You haven't selected any interests yet.</p>
               )}
             </div>
 
-            <div className="pt-6 border-t border-gray-200 dark:border-gray-700 mt-10">
+            <div className="pt-6 border-t border-slate-200 dark:border-slate-700 mt-10">
               <button 
                 onClick={() => setShowDeleteConfirm(true)}
                 className="px-4 py-2 border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-medium rounded-md hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"

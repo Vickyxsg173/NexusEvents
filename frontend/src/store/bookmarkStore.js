@@ -22,7 +22,7 @@ export const useBookmarkStore = create((set, get) => ({
 
       if (error) throw error;
       
-      const events = data.map(item => item.events);
+      const events = data.map(item => item.events).filter(e => e !== null);
       const ids = new Set(events.map(e => e.id));
       
       set({ savedEvents: events, savedEventIds: ids, loading: false });

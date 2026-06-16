@@ -23,16 +23,16 @@ export default function EventFilters({ filters, setFilters }) {
   const hasActiveFilters = Object.values(filters).some(val => val !== '');
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-8 transition-colors">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 mb-8 transition-colors">
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center text-gray-900 dark:text-white font-semibold">
+        <div className="flex items-center text-slate-900 dark:text-white font-semibold">
           <Filter className="w-5 h-5 mr-2 text-brand-600" />
           Filter Events
         </div>
         {hasActiveFilters && (
           <button 
             onClick={clearFilters}
-            className="text-sm flex items-center text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors"
+            className="text-sm flex items-center text-slate-500 hover:text-red-500 dark:text-slate-400 dark:hover:text-red-400 transition-colors"
           >
             <X className="w-4 h-4 mr-1" /> Clear All
           </button>
@@ -42,7 +42,7 @@ export default function EventFilters({ filters, setFilters }) {
       {/* Search Bar */}
       <div className="mb-4 relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search className="w-5 h-5 text-gray-400" />
+          <Search className="w-5 h-5 text-slate-400" />
         </div>
         <input 
           type="text"
@@ -50,7 +50,7 @@ export default function EventFilters({ filters, setFilters }) {
           value={filters.search || ''}
           onChange={handleChange}
           placeholder="Search for events by keyword, name, or description..."
-          className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block pl-10 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white transition-colors shadow-sm"
+          className="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block pl-10 p-3 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white transition-colors shadow-sm"
         />
       </div>
 
@@ -58,12 +58,12 @@ export default function EventFilters({ filters, setFilters }) {
         
         {/* Source Platform Filter */}
         <div>
-          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider">Source</label>
+          <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider">Source</label>
           <select 
             name="source_platform" 
             value={filters.source_platform} 
             onChange={handleChange}
-            className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white transition-colors"
+            className="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white transition-colors"
           >
             <option value="">All Sources</option>
             <option value="Unstop">Unstop</option>
@@ -74,12 +74,12 @@ export default function EventFilters({ filters, setFilters }) {
 
         {/* Mode Filter */}
         <div>
-          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider">Mode</label>
+          <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider">Mode</label>
           <select 
             name="mode" 
             value={filters.mode} 
             onChange={handleChange}
-            className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white transition-colors"
+            className="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white transition-colors"
           >
             <option value="">All Modes</option>
             <option value="Online">Online</option>
@@ -90,12 +90,12 @@ export default function EventFilters({ filters, setFilters }) {
 
         {/* Event Type Filter */}
         <div>
-          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider">Type</label>
+          <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider">Type</label>
           <select 
             name="event_type" 
             value={filters.event_type} 
             onChange={handleChange}
-            className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white transition-colors"
+            className="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white transition-colors"
           >
             <option value="">All Types</option>
             <option value="Hackathon">Hackathon</option>
@@ -108,12 +108,12 @@ export default function EventFilters({ filters, setFilters }) {
 
         {/* Category Filter */}
         <div>
-          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 uppercase tracking-wider">Category</label>
+          <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider">Category</label>
           <select 
             name="category" 
             value={filters.category} 
             onChange={handleChange}
-            className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white transition-colors"
+            className="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white transition-colors"
           >
             <option value="">All Categories</option>
             <option value="AI/ML">AI / ML</option>

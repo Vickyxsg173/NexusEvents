@@ -7,6 +7,7 @@ import { useAuthStore } from './store/authStore';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Landing from './pages/Landing';
+import Dashboard from './pages/Dashboard';
 import Discover from './pages/Discover';
 import Profile from './pages/Profile';
 import SavedEvents from './pages/SavedEvents';
@@ -20,7 +21,7 @@ const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuthStore();
   
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center dark:bg-gray-900 dark:text-white">Loading...</div>;
+    return <div className="min-h-screen flex items-center justify-center dark:bg-slate-900 dark:text-white">Loading...</div>;
   }
   
   if (!user) {
@@ -43,7 +44,7 @@ function App() {
   }, [initialize]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-900 dark:text-slate-100">
       <Router>
         <Navbar />
 
@@ -53,6 +54,14 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/" element={<Landing />} />
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
           <Route 
             path="/discover" 
             element={

@@ -38,15 +38,17 @@ const StyledWrapper = styled.div`
     justify-content: center;
     color: white;
     /* Scale it down slightly so it fits the navbar perfectly */
-    transform: scale(0.6);
+    transform: scale(0.45);
     transform-origin: right center;
-    margin-right: 20px;
-    margin-left: 20px;
+    margin-right: 16px;
+    margin-left: 16px;
   }
 
   .toggleWrapper .input {
     position: absolute;
-    left: -99em;
+    opacity: 0;
+    width: 0;
+    height: 0;
   }
 
   .toggle {

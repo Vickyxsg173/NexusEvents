@@ -28,16 +28,16 @@ export default function ImageCropperModal({ imageSrc, onComplete, onCancel }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-gray-900/75 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden relative flex flex-col">
-        <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Adjust Profile Photo</h3>
-          <button onClick={onCancel} className="text-gray-400 hover:text-gray-500 transition-colors">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-md overflow-hidden relative flex flex-col">
+        <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Adjust Profile Photo</h3>
+          <button onClick={onCancel} className="text-slate-400 hover:text-slate-500 transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
         
-        <div className="relative w-full h-80 bg-gray-100 dark:bg-gray-900">
+        <div className="relative w-full h-80 bg-slate-100 dark:bg-slate-900">
           <Cropper
             image={imageSrc}
             crop={crop}
@@ -51,9 +51,9 @@ export default function ImageCropperModal({ imageSrc, onComplete, onCancel }) {
           />
         </div>
 
-        <div className="p-6 bg-white dark:bg-gray-800">
+        <div className="p-6 bg-white dark:bg-slate-800">
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Zoom</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Zoom</label>
             <input
               type="range"
               value={zoom}
@@ -61,14 +61,14 @@ export default function ImageCropperModal({ imageSrc, onComplete, onCancel }) {
               max={3}
               step={0.1}
               onChange={(e) => setZoom(e.target.value)}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-brand-600"
+              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-brand-600"
             />
           </div>
           
           <div className="flex space-x-3">
             <button
               onClick={onCancel}
-              className="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg font-medium transition-colors"
+              className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg font-medium transition-colors"
             >
               Cancel
             </button>

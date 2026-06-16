@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, ExternalLink, Tag, Bookmark, CalendarPlus } from 'lucide-react';
 import { useBookmarkStore } from '../store/bookmarkStore';
+import { motion } from 'framer-motion';
 
 export default function EventCard({ event }) {
   const navigate = useNavigate();
@@ -67,14 +68,16 @@ export default function EventCard({ event }) {
   };
 
   return (
-    <div 
+    <motion.div 
       onClick={() => navigate(`/event/${event.id}`)}
-      className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full cursor-pointer"
+      whileHover={{ y: -5, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      className="group bg-white/50 dark:bg-slate-900/40 backdrop-blur-xl rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.05)] hover:shadow-[0_0_25px_rgba(6,182,212,0.2)] border border-slate-200/50 dark:border-white/10 overflow-hidden flex flex-col h-full cursor-pointer transition-colors"
     >
       
       {/* Top Banner Area */}
       <div 
-        className="h-36 relative flex flex-col justify-between p-4 bg-cover bg-center bg-no-repeat bg-gray-200"
+        className="h-36 relative flex flex-col justify-between p-4 bg-cover bg-center bg-no-repeat bg-slate-200"
         style={{ backgroundImage: `url(${hasImage ? event.cover_image : getFallbackImage()})` }}
       >
         {/* Dark overlay for readability */}
@@ -114,7 +117,7 @@ export default function EventCard({ event }) {
           </div>
           
           {/* Smart Recommendation Badge */}
-          {event._matchScore && event._matchScore > 2 ? (
+          {event._matchScore && event._matchScore > 0 ? (
             <div className="self-start mt-auto inline-block px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold rounded-full shadow-md border border-white/20">
               ✨ Recommended Match
             </div>
@@ -125,15 +128,15 @@ export default function EventCard({ event }) {
       {/* Content Area */}
       <div className="p-5 flex-grow flex flex-col">
         <div className="mb-4">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white line-clamp-2 mb-1 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white line-clamp-2 mb-1 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
             {event.title}
           </h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+          <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
             by {event.organizer || event.source_platform}
           </p>
         </div>
 
-        <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 mb-6 flex-grow">
+        <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-3 mb-6 flex-grow">
           {event.description && event.description.trim() !== '' 
             ? event.description 
             : 'Details for this event are available on the organizer\'s website. Click the link below to learn more and register.'}
@@ -143,7 +146,7 @@ export default function EventCard({ event }) {
         {event.tags && event.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6">
             {event.tags.slice(0, 3).map((tag, idx) => (
-              <span key={idx} className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+              <span key={idx} className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300">
                 <Tag className="w-3 h-3 mr-1" />
                 {tag}
               </span>
@@ -152,8 +155,8 @@ export default function EventCard({ event }) {
         )}
 
         {/* Footer Details */}
-        <div className="space-y-3 pt-4 border-t border-gray-100 dark:border-gray-700 mt-auto">
-          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+        <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-700 mt-auto">
+          <div className="flex items-center text-sm text-slate-500 dark:text-slate-400">
             <Calendar className="w-4 h-4 mr-2 flex-shrink-0 text-brand-500" />
             <span className="truncate">
               {formatDate(event.start_date)} {event.end_date && `- ${formatDate(event.end_date)}`}
@@ -161,7 +164,7 @@ export default function EventCard({ event }) {
           </div>
           
           <div className="flex items-center justify-between">
-            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 truncate pr-2">
+            <div className="flex items-center text-sm text-slate-500 dark:text-slate-400 truncate pr-2">
               <MapPin className="w-4 h-4 mr-2 flex-shrink-0 text-brand-500" />
               <span className="truncate">{event.venue || 'Online'}</span>
             </div>
@@ -191,6 +194,6 @@ export default function EventCard({ event }) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

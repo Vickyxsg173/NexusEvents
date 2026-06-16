@@ -8,6 +8,22 @@ import EventCard from '../components/EventCard';
 import EventCardSkeleton from '../components/EventCardSkeleton';
 import EventFilters from '../components/EventFilters';
 import { Search } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
+};
 
 export default function Discover() {
   const { user } = useAuthStore();
@@ -47,6 +63,32 @@ export default function Discover() {
 
   const needsOnboarding = !profileLoading && userInterests.length === 0;
 
+  // Calculate match scores for events based on userInterests
+  const scoredEvents = React.useMemo(() => {
+    if (!events || !userInterests || userInterests.length === 0) return events;
+    
+    const interestKeywords = userInterests
+      .filter(i => typeof i === 'string' && i.trim() !== '')
+      .map(i => i.toLowerCase());
+      
+    if (interestKeywords.length === 0) return events;
+    
+    return events.map(event => {
+      let score = 0;
+      const title = (event.title || '').toLowerCase();
+      const desc = (event.description || '').toLowerCase();
+      const tags = (event.tags || []).map(t => typeof t === 'string' ? t.toLowerCase() : '');
+      
+      interestKeywords.forEach(keyword => {
+        if (title.includes(keyword)) score += 3;
+        if (tags.some(t => t.includes(keyword) || keyword.includes(t))) score += 2;
+        if (desc.includes(keyword)) score += 1;
+      });
+      
+      return { ...event, _matchScore: score };
+    });
+  }, [events, userInterests]);
+
   return (
     <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       {needsOnboarding && <InterestOnboarding onComplete={fetchUserInterests} />}
@@ -54,8 +96,8 @@ export default function Discover() {
       {/* Header Section */}
       <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Discover Events</h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Discover Events</h1>
+          <p className="mt-2 text-slate-600 dark:text-slate-400">
             Find the best hackathons, conferences, and meetups tailored for you.
           </p>
         </div>
@@ -75,25 +117,32 @@ export default function Discover() {
           Error loading events: {error}
         </div>
       ) : events.length === 0 ? (
-        <div className="text-center py-20 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-          <Search className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">No events found</h3>
-          <p className="mt-1 text-gray-500 dark:text-gray-400">Our AI scrapers haven't picked anything up yet. Check back soon!</p>
+        <div className="text-center py-20 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+          <Search className="w-12 h-12 mx-auto text-slate-400 mb-4" />
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white">No events found</h3>
+          <p className="mt-1 text-slate-500 dark:text-slate-400">Our AI scrapers haven't picked anything up yet. Check back soon!</p>
         </div>
       ) : (
         <div className="space-y-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {events.map((event, idx) => (
-              <EventCard key={`${event.id}-${idx}`} event={event} />
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          >
+            {scoredEvents.map((event, idx) => (
+              <motion.div key={`${event.id}-${idx}`} variants={itemVariants} className="h-full">
+                <EventCard event={event} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
           
           {hasMore && (
             <div className="flex justify-center mt-10 mb-8">
               <button
                 onClick={handleLoadMore}
                 disabled={isLoadingMore}
-                className="px-8 py-3 bg-white dark:bg-gray-800 text-brand-600 dark:text-brand-400 font-semibold rounded-full shadow-sm hover:shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:bg-brand-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transform hover:-translate-y-0.5 disabled:opacity-50"
+                className="px-8 py-3 bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-400 font-semibold rounded-full shadow-sm hover:shadow-lg border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:bg-brand-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 transform hover:-translate-y-0.5 disabled:opacity-50"
               >
                 {isLoadingMore ? 'Loading...' : 'Load More Events'}
               </button>
