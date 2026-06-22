@@ -95,7 +95,8 @@ export default function EventFilters({ filters, setFilters }) {
             <option value="CNCF">Cloud Native Computing Foundation</option>
             <option value="Linux Foundation">Linux Foundation</option>
             <option value="Y Combinator">Y Combinator</option>
-            <option value="GitHub Internships (Simplify)">GitHub Internships</option>
+            <option value="GitHub">GitHub Internships</option>
+            <option value="Govt & Research">Government & Research</option>
           </select>
         </div>
 
