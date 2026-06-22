@@ -82,9 +82,16 @@ export default function EventFilters({ filters, setFilters }) {
             className="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white transition-colors"
           >
             <option value="">All Sources</option>
-            <option value="Unstop">Unstop</option>
-            <option value="Devfolio">Devfolio</option>
+            <option value="Devpost">Devpost</option>
+            <option value="GDG">Google Developer Groups</option>
+            <option value="Microsoft Reactor">Microsoft Reactor</option>
+            <option value="AWS Events">AWS Events</option>
+            <option value="Meetup">Meetup</option>
             <option value="Hack2Skill">Hack2Skill</option>
+            <option value="CNCF">Cloud Native Computing Foundation</option>
+            <option value="Linux Foundation">Linux Foundation</option>
+            <option value="Y Combinator Jobs">Y Combinator Jobs</option>
+            <option value="GitHub Internships (Simplify)">GitHub Internships</option>
           </select>
         </div>
 
@@ -119,6 +126,7 @@ export default function EventFilters({ filters, setFilters }) {
             <option value="Competition">Competition</option>
             <option value="Workshop">Workshop</option>
             <option value="Webinar">Webinar</option>
+            <option value="Internship/Job">Internship / Job</option>
           </select>
         </div>
 

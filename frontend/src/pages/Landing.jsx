@@ -160,7 +160,7 @@ export default function Landing() {
         </div>
         <div className="flex justify-center flex-wrap gap-8 md:gap-16 opacity-70">
           {/* Mock Logos - using styled text for now */}
-          {['Devpost', 'Devfolio', 'MLH', 'Luma', 'Unstop', 'Eventbrite'].map((platform, idx) => (
+          {['Devpost', 'Meetup', 'AWS', 'Google', 'Microsoft', 'Hack2Skill', 'GitHub', 'Y Combinator', 'CNCF', 'Linux Found.'].map((platform, idx) => (
             <motion.div 
               key={idx}
               initial={{ opacity: 0, y: 10 }}
