@@ -1,5 +1,7 @@
 const { supabase } = require('../config/supabase');
-
+const { SupabaseVectorStore } = require('@langchain/community/vectorstores/supabase');
+const CustomGeminiEmbeddings = require('../utils/geminiEmbeddings');
+const { Document } = require('@langchain/core/documents');
 // @desc    Get all events
 // @route   GET /api/events
 exports.getEvents = async (req, res) => {
@@ -103,6 +105,43 @@ exports.createEvent = async (req, res) => {
         .insert(tagInserts);
 
       if (tagError) console.error("Error inserting tags:", tagError); // Non-fatal for the event itself
+    }
+
+    // 3. Real-time RAG Embedding Generation
+    try {
+      if (process.env.GEMINI_API_KEY) {
+        const embeddings = new CustomGeminiEmbeddings(process.env.GEMINI_API_KEY);
+        
+        const pageContent = `
+Event Title: ${newEvent.title || 'Unknown'}
+Organization: ${newEvent.organizer || 'Unknown'}
+Category: ${newEvent.category || 'Tech'}
+Location/Mode: ${newEvent.mode || 'Online'}
+Description: ${newEvent.description || ''}
+        `.trim();
+
+        const metadata = {
+          event_id: newEvent.id,
+          mode: newEvent.mode || 'Online',
+          start_date: newEvent.start_date,
+          tags: tags || []
+        };
+
+        const doc = new Document({ pageContent, metadata });
+
+        await SupabaseVectorStore.fromDocuments(
+          [doc],
+          embeddings,
+          {
+            client: supabase,
+            tableName: "event_embeddings",
+            queryName: "match_event_embeddings",
+          }
+        );
+      }
+    } catch (embedError) {
+      console.error("Error generating vector embedding for new event:", embedError);
+      // Non-fatal, return 201 success anyway
     }
 
     res.status(201).json({
