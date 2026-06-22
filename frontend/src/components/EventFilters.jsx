@@ -130,7 +130,7 @@ export default function EventFilters({ filters, setFilters }) {
             <option value="Competition">Competition</option>
             <option value="Workshop">Workshop</option>
             <option value="Webinar">Webinar</option>
-            <option value="Internship/Job">Internship / Job</option>
+            <option value="Internship">Internship / Job</option>
           </select>
         </div>
 

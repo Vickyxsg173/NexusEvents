@@ -10,7 +10,10 @@ export default function Chat() {
   const [showResults, setShowResults] = useState(false);
   
   const inputRef = useRef(null);
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  if (API_URL.endsWith('/api/events')) {
+    API_URL = API_URL.replace('/api/events', '');
+  }
 
   useEffect(() => {
     if (isOpen && inputRef.current) {
