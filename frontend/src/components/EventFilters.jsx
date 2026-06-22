@@ -85,16 +85,16 @@ export default function EventFilters({ filters, setFilters }) {
             <option value="Unstop">Unstop</option>
             <option value="Devfolio">Devfolio</option>
             <option value="HackerEarth">HackerEarth</option>
-            <option value="MLH">MLH</option>
+            <option value="Major League Hacking (MLH)">MLH</option>
             <option value="Devpost">Devpost</option>
-            <option value="GDG">Google Developer Groups</option>
+            <option value="Google Developer Groups (GDG)">Google Developer Groups</option>
             <option value="Microsoft Reactor">Microsoft Reactor</option>
             <option value="AWS Events">AWS Events</option>
             <option value="Meetup">Meetup</option>
             <option value="Hack2Skill">Hack2Skill</option>
             <option value="CNCF">Cloud Native Computing Foundation</option>
             <option value="Linux Foundation">Linux Foundation</option>
-            <option value="Y Combinator Jobs">Y Combinator Jobs</option>
+            <option value="Y Combinator">Y Combinator</option>
             <option value="GitHub Internships (Simplify)">GitHub Internships</option>
           </select>
         </div>
