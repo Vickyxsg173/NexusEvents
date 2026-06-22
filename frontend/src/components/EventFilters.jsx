@@ -82,6 +82,10 @@ export default function EventFilters({ filters, setFilters }) {
             className="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white transition-colors"
           >
             <option value="">All Sources</option>
+            <option value="Unstop">Unstop</option>
+            <option value="Devfolio">Devfolio</option>
+            <option value="HackerEarth">HackerEarth</option>
+            <option value="MLH">MLH</option>
             <option value="Devpost">Devpost</option>
             <option value="GDG">Google Developer Groups</option>
             <option value="Microsoft Reactor">Microsoft Reactor</option>
