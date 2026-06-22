@@ -16,6 +16,7 @@ from linux_foundation_scraper import LinuxFoundationScraper
 from yc_jobs_scraper import YCJobsScraper
 from github_interns_scraper import GithubInternsScraper
 from mlh_scraper import MLHScraper
+from govt_research_scraper import GovtResearchScraper
 
 def main():
     print("========================================")
@@ -35,7 +36,8 @@ def main():
         CNCFScraper(),
         YCJobsScraper(),
         GithubInternsScraper(),
-        MLHScraper()
+        MLHScraper(),
+        GovtResearchScraper()
     ]
     
     total_events = 0
