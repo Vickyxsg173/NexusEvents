@@ -1,20 +1,22 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
+import React, { useEffect, Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useAuthStore } from './store/authStore';
-
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Landing from './pages/Landing';
-import Dashboard from './pages/Dashboard';
-import Discover from './pages/Discover';
-import Profile from './pages/Profile';
-import SavedEvents from './pages/SavedEvents';
-import EventDetails from './pages/EventDetails';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
 import Navbar from './components/Navbar';
+import Loader from './components/Loader';
+
+// Lazy load route components
+const Login = lazy(() => import('./pages/Login'));
+const Signup = lazy(() => import('./pages/Signup'));
+const Landing = lazy(() => import('./pages/Landing'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Discover = lazy(() => import('./pages/Discover'));
+const Profile = lazy(() => import('./pages/Profile'));
+const SavedEvents = lazy(() => import('./pages/SavedEvents'));
+const EventDetails = lazy(() => import('./pages/EventDetails'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -32,7 +34,7 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
-  const { initialize, user, signOut } = useAuthStore();
+  const { initialize, user } = useAuthStore();
 
   useEffect(() => {
     initialize();
@@ -48,53 +50,55 @@ function App() {
       <Router>
         <Navbar />
 
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/" element={<Landing />} />
-          <Route 
-            path="/dashboard" 
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/discover" 
-            element={
-              <ProtectedRoute>
-                <Discover />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/profile" 
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/saved" 
-            element={
-              <ProtectedRoute>
-                <SavedEvents />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/event/:id" 
-            element={
-              <ProtectedRoute>
-                <EventDetails />
-              </ProtectedRoute>
-            } 
-          />
-        </Routes>
+        <Suspense fallback={<Loader />}>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/" element={<Landing />} />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/discover" 
+              element={
+                <ProtectedRoute>
+                  <Discover />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/saved" 
+              element={
+                <ProtectedRoute>
+                  <SavedEvents />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/event/:id" 
+              element={
+                <ProtectedRoute>
+                  <EventDetails />
+                </ProtectedRoute>
+              } 
+            />
+          </Routes>
+        </Suspense>
       </Router>
     </div>
   );

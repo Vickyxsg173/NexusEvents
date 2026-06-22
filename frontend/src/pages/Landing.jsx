@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useBookmarkStore } from '../store/bookmarkStore';
-import { Zap, Globe, Bookmark, ArrowRight, Target, Brain, Bot, Sparkles, Database, Cpu, Mail, Code, TrendingUp, Layers, CheckCircle2, MessageSquare, Star } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Zap, Globe, Bookmark, ArrowRight, Target, Brain, Bot, Sparkles, Database, Cpu, Mail, Code, TrendingUp, Layers, CheckCircle2, MessageSquare, Star, Calendar, Users, Video, Bell, User, Search, Smartphone, Award, Network } from 'lucide-react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 // Animation variants for Staggered text
 const containerVariants = {
@@ -27,30 +27,74 @@ const itemVariants = {
 export default function Landing() {
   const { user } = useAuthStore();
   const { savedEventIds } = useBookmarkStore();
+  const [showAllFeatures, setShowAllFeatures] = useState(false);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Smooth out the mouse trailing effect
+  const springX = useSpring(mouseX, { stiffness: 50, damping: 20 });
+  const springY = useSpring(mouseY, { stiffness: 50, damping: 20 });
+
+  useEffect(() => {
+    // Center initially
+    mouseX.set(typeof window !== 'undefined' ? window.innerWidth / 2 - 400 : 0);
+    mouseY.set(typeof window !== 'undefined' ? window.innerHeight / 2 - 400 : 0);
+
+    const handleMouseMove = (e) => {
+      // 400 is half the width/height of the new larger orb
+      mouseX.set(e.clientX - 400); 
+      mouseY.set(e.clientY - 400);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY]);
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-transparent">
+    <div className="min-h-screen relative overflow-hidden bg-slate-50 dark:bg-slate-950">
       
-      {/* Animated Floating Orbs Background */}
+      {/* Background Noise Texture for premium feel */}
+      <div 
+        className="fixed inset-0 z-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none mix-blend-overlay"
+        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}
+      />
+
+      {/* Adaptive Interactive Cursor Blob */}
+      <motion.div
+        style={{ x: springX, y: springY }}
+        className="fixed top-0 left-0 w-[800px] h-[800px] pointer-events-none z-0 will-change-transform"
+      >
+        <motion.div 
+          className="absolute inset-0 rounded-full blur-[120px] bg-gradient-to-tr from-brand-400/60 via-purple-400/60 to-transparent dark:from-cyan-500/40 dark:via-purple-600/40 dark:to-transparent mix-blend-multiply dark:mix-blend-screen"
+          animate={{
+            rotate: [0, 90, 180, 270, 360],
+            scale: [1, 1.1, 1]
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        />
+      </motion.div>
+
+      {/* Animated Floating Orbs Background (Subtle) */}
       <motion.div 
         animate={{ 
           scale: [1, 1.3, 1],
-          opacity: [0.4, 0.7, 0.4],
+          opacity: [0.2, 0.4, 0.2],
           x: [0, 80, -20, 0],
           y: [0, -60, 20, 0]
         }}
         transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-20 -left-20 w-[500px] h-[500px] bg-purple-500/30 blur-[100px] rounded-full pointer-events-none"
+        className="absolute top-20 -left-20 w-[500px] h-[500px] bg-purple-500/20 blur-[100px] rounded-full pointer-events-none z-0"
       />
       <motion.div 
         animate={{ 
           scale: [1, 1.4, 1],
-          opacity: [0.3, 0.6, 0.3],
+          opacity: [0.2, 0.4, 0.2],
           x: [0, -70, 30, 0],
           y: [0, 60, -20, 0]
         }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute top-40 -right-20 w-[600px] h-[600px] bg-cyan-500/30 blur-[100px] rounded-full pointer-events-none"
+        className="absolute top-40 -right-20 w-[600px] h-[600px] bg-cyan-500/20 blur-[100px] rounded-full pointer-events-none z-0"
       />
 
       {/* Hero Section */}
@@ -77,9 +121,9 @@ export default function Landing() {
             NexusEvents aggressively scrapes top platforms to bring you every global tech event, instantly scored by AI to match your personal interests.
           </motion.p>
           
-          <motion.p variants={itemVariants} className="max-w-2xl text-sm font-medium text-brand-600 dark:text-cyan-400 mx-auto mb-10 flex items-center justify-center">
-            <Target className="w-4 h-4 mr-1.5" /> 
-            Continuously discovering new opportunities just for you.
+          <motion.p variants={itemVariants} className="max-w-2xl text-sm font-medium text-brand-600 dark:text-cyan-400 mx-auto mb-10 inline-flex items-center justify-center text-center">
+            <Target className="w-4 h-4 mr-1.5 shrink-0" /> 
+            <span>Continuously discovering new opportunities just for you.</span>
           </motion.p>
           
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row justify-center gap-4">
@@ -132,8 +176,8 @@ export default function Landing() {
       </div>
 
       {/* Features Grid */}
-      <div className="relative z-10 py-24 bg-transparent">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 py-24 bg-transparent overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div 
             initial={{ opacity: 0, y: 40, scale: 0.95 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -145,34 +189,67 @@ export default function Landing() {
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {[
-              { icon: Globe, title: "Global Aggregation", desc: "We scrape the top platforms globally so you never have to check 5 different websites to find the perfect competition.", color: "text-blue-500", bg: "bg-blue-500/10" },
-              { icon: Zap, title: "AI Recommendations", desc: "Our engine cross-references your skills with event requirements to bubble up the best matching opportunities just for you.", color: "text-purple-500", bg: "bg-purple-500/10" },
-              { icon: Bookmark, title: "Instant Bookmarking", desc: "Save events with one click and access them beautifully formatted in your personalized dashboard.", color: "text-cyan-500", bg: "bg-cyan-500/10" }
-            ].map((feature, idx) => (
-              <motion.div 
-                key={idx}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ delay: idx * 0.2, type: "spring", stiffness: 120, damping: 15 }}
-                whileHover={{ y: -10, scale: 1.05 }}
-                className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300"
-              >
-                <div className={`w-14 h-14 ${feature.bg} rounded-xl flex items-center justify-center mb-6`}>
-                  <feature.icon className={`w-7 h-7 ${feature.color}`} />
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{feature.title}</h3>
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{feature.desc}</p>
-              </motion.div>
-            ))}
+            {(() => {
+              const features = [
+                { icon: Globe, title: "Global Aggregation", desc: "We scrape the top platforms globally so you never have to check 5 different websites to find the perfect competition.", color: "text-blue-500", bg: "bg-blue-500/10" },
+                { icon: Zap, title: "AI Recommendations", desc: "Our engine cross-references your skills with event requirements to bubble up the best matching opportunities just for you.", color: "text-purple-500", bg: "bg-purple-500/10" },
+                { icon: Bookmark, title: "Instant Bookmarking", desc: "Save events with one click and access them beautifully formatted in your personalized dashboard.", color: "text-cyan-500", bg: "bg-cyan-500/10" },
+                { icon: Calendar, title: "Google Calendar Sync", desc: "Add your favorite events directly to your Google Calendar so you never miss an upcoming hackathon or meetup.", color: "text-amber-500", bg: "bg-amber-500/10" },
+                { icon: Mail, title: "Smart Email Digests", desc: "Get highly personalized event recommendations automatically sent straight to your inbox on your preferred schedule.", color: "text-emerald-500", bg: "bg-emerald-500/10" },
+                { icon: Bell, title: "Custom Event Reminders", desc: "Set personal alerts for saved events and receive timely email notifications before registration closes or the event begins.", color: "text-rose-500", bg: "bg-rose-500/10" },
+                { icon: User, title: "Developer Profiles", desc: "Build a dynamic tech portfolio featuring your resume, GitHub, and social links to stand out to organizers and future teammates.", color: "text-indigo-500", bg: "bg-indigo-500/10" },
+                { icon: MessageSquare, title: "Interactive Chat Search", desc: "Skip the complex filters. Use our natural language chat assistant to find exactly what you're looking for instantly.", color: "text-teal-500", bg: "bg-teal-500/10" },
+                { icon: Layers, title: "Advanced Filtering", desc: "Drill down by online/offline modes, specific tech stacks, and dates to filter out the noise and find pure signal.", color: "text-orange-500", bg: "bg-orange-500/10" }
+              ];
+
+              const visibleFeatures = showAllFeatures ? features : features.slice(0, 5);
+
+              return (
+                <>
+                  {visibleFeatures.map((feature, idx) => (
+                    <motion.div 
+                      key={idx}
+                      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ delay: idx * 0.1, type: "spring", stiffness: 120, damping: 15 }}
+                      whileHover={{ y: -10, scale: 1.05 }}
+                      className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300"
+                    >
+                      <div className={`w-14 h-14 ${feature.bg} rounded-xl flex items-center justify-center mb-6`}>
+                        <feature.icon className={`w-7 h-7 ${feature.color}`} />
+                      </div>
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{feature.title}</h3>
+                      <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{feature.desc}</p>
+                    </motion.div>
+                  ))}
+                  
+                  {!showAllFeatures && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ delay: 0.5, type: "spring", stiffness: 120, damping: 15 }}
+                      whileHover={{ y: -10, scale: 1.05 }}
+                      onClick={() => setShowAllFeatures(true)}
+                      className="bg-white/40 dark:bg-slate-900/30 backdrop-blur-md p-8 rounded-2xl shadow-sm border border-dashed border-slate-300 dark:border-slate-700 hover:border-cyan-500 dark:hover:border-cyan-500 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 flex flex-col items-center justify-center cursor-pointer min-h-[250px] group"
+                    >
+                      <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4 group-hover:bg-cyan-50 dark:group-hover:bg-cyan-900/30 transition-colors">
+                        <span className="text-3xl text-slate-400 group-hover:text-cyan-500 transition-colors">+</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-slate-700 dark:text-slate-300 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">Show More</h3>
+                    </motion.div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         </div>
       </div>
 
       {/* Developer Experience Highlight */}
       <div className="relative z-10 py-24 border-t border-slate-200/50 dark:border-white/5 bg-slate-50/50 dark:bg-black/20 backdrop-blur-sm overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
             <motion.div 
@@ -281,9 +358,9 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* AI Features Coming Soon */}
-      <div className="py-24 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      {/* Coming Soon Features */}
+      <div className="relative z-10 py-24 bg-transparent overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
            <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -299,10 +376,10 @@ export default function Landing() {
             viewport={{ once: true }}
             className="text-3xl font-bold text-slate-900 dark:text-white mb-16"
           >
-            Powerful AI Features <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500">Coming Soon</span>
+            Powerful Features <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500">Coming Soon</span>
           </motion.h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -312,9 +389,24 @@ export default function Landing() {
               <div className="w-12 h-12 bg-white/80 dark:bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center mb-6 shadow-sm border border-slate-100 dark:border-white/10">
                 <Target className="w-6 h-6 text-brand-600 dark:text-cyan-400" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">One-Click AI Registration</h3>
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">One-Click Auto-Fill</h3>
+              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
                 Tired of filling out the same forms? We are building an AI auto-fill engine that completes your hackathon registrations with a single click.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="bg-white/50 dark:bg-slate-900/40 backdrop-blur-lg p-8 rounded-3xl border border-slate-200 dark:border-white/10 relative overflow-hidden group text-left"
+            >
+              <div className="w-12 h-12 bg-white/80 dark:bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center mb-6 shadow-sm border border-slate-100 dark:border-white/10">
+                <Users className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Developer Communities</h3>
+              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                Connect with others, find hackathon teammates, and join exclusive discussions in our upcoming dedicated community spaces.
               </p>
             </motion.div>
 
@@ -325,11 +417,56 @@ export default function Landing() {
               className="bg-white/50 dark:bg-slate-900/40 backdrop-blur-lg p-8 rounded-3xl border border-slate-200 dark:border-white/10 relative overflow-hidden group text-left"
             >
               <div className="w-12 h-12 bg-white/80 dark:bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center mb-6 shadow-sm border border-slate-100 dark:border-white/10">
-                <Bot className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                <Video className="w-6 h-6 text-amber-500" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">Personalized Email Digests</h3>
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                Get automated weekly roundups delivered straight to your inbox, containing the top upcoming hackathons specifically curated by our AI engine.
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Direct Meeting Join</h3>
+              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                Join meetings and get online support directly from the platform. Seamlessly integrates with Zoom, Google Meet, Webex, and Teams.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="bg-white/50 dark:bg-slate-900/40 backdrop-blur-lg p-8 rounded-3xl border border-slate-200 dark:border-white/10 relative overflow-hidden group text-left"
+            >
+              <div className="w-12 h-12 bg-white/80 dark:bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center mb-6 shadow-sm border border-slate-100 dark:border-white/10">
+                <Network className="w-6 h-6 text-pink-500" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Team Matchmaking</h3>
+              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                Looking for a backend developer or UI designer? Our algorithmic matchmaking will help you form the perfect squad before the hackathon begins.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="bg-white/50 dark:bg-slate-900/40 backdrop-blur-lg p-8 rounded-3xl border border-slate-200 dark:border-white/10 relative overflow-hidden group text-left"
+            >
+              <div className="w-12 h-12 bg-white/80 dark:bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center mb-6 shadow-sm border border-slate-100 dark:border-white/10">
+                <Award className="w-6 h-6 text-indigo-500" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Project Showcases</h3>
+              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                Upload your past hackathon projects, gather upvotes from the community, and build a verifiable track record of your winning builds.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-white/50 dark:bg-slate-900/40 backdrop-blur-lg p-8 rounded-3xl border border-slate-200 dark:border-white/10 relative overflow-hidden group text-left"
+            >
+              <div className="w-12 h-12 bg-white/80 dark:bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center mb-6 shadow-sm border border-slate-100 dark:border-white/10">
+                <Smartphone className="w-6 h-6 text-emerald-500" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Native Mobile App</h3>
+              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                We are bringing the entire NexusEvents experience to iOS and Android so you can discover, chat, and bookmark opportunities on the go.
               </p>
             </motion.div>
           </div>

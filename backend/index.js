@@ -8,7 +8,8 @@ const PORT = process.env.PORT || 5000;
 
 // Route files
 const eventRoutes = require('./routes/eventRoutes');
-const startCronJobs = require('./services/cronService');
+const chatbotRoutes = require('./routes/chatbot');
+const { startCronJobs } = require('./services/cronService');
 
 // Middlewares
 app.use(cors());
@@ -22,6 +23,7 @@ app.get('/api/health', (req, res) => {
 
 // Mount routers
 app.use('/api/events', eventRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 // Start Background Cron Jobs
 startCronJobs();

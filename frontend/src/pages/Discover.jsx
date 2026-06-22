@@ -7,6 +7,7 @@ import InterestOnboarding from '../components/InterestOnboarding';
 import EventCard from '../components/EventCard';
 import EventCardSkeleton from '../components/EventCardSkeleton';
 import EventFilters from '../components/EventFilters';
+import Chat from '../components/Chat';
 import { Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -27,7 +28,7 @@ const itemVariants = {
 
 export default function Discover() {
   const { user } = useAuthStore();
-  const { userInterests, fetchUserInterests, loading: profileLoading } = useProfileStore();
+  const { userInterests, fetchUserInterests, hasFetchedInterests } = useProfileStore();
   const { events, fetchEvents, loading: eventsLoading, error, hasMore } = useEventStore();
   const { fetchSavedEvents } = useBookmarkStore();
   
@@ -61,7 +62,7 @@ export default function Discover() {
     setIsLoadingMore(false);
   };
 
-  const needsOnboarding = !profileLoading && userInterests.length === 0;
+  const needsOnboarding = hasFetchedInterests && userInterests.length === 0;
 
   // Calculate match scores for events based on userInterests
   const scoredEvents = React.useMemo(() => {
@@ -150,6 +151,9 @@ export default function Discover() {
           )}
         </div>
       )}
+
+      {/* RAG Chatbot UI */}
+      <Chat />
     </div>
   );
 }

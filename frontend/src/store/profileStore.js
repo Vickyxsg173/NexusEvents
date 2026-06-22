@@ -6,6 +6,7 @@ export const useProfileStore = create((set, get) => ({
   profile: null,
   allInterests: [],
   userInterests: [],
+  hasFetchedInterests: false,
   loading: false,
   error: null,
 
@@ -82,6 +83,34 @@ export const useProfileStore = create((set, get) => ({
     }
   },
 
+  uploadResume: async (file) => {
+    const { user } = useAuthStore.getState();
+    if (!user) return;
+
+    set({ loading: true, error: null });
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/resume-${Math.random()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('resumes')
+        .upload(fileName, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage.from('resumes').getPublicUrl(fileName);
+      
+      await get().updateProfile({ resume_url: data.publicUrl });
+      
+      return data.publicUrl;
+    } catch (error) {
+      set({ error: error.message });
+      throw error;
+    } finally {
+      set({ loading: false });
+    }
+  },
+
   fetchAllInterests: async () => {
     try {
       const { data, error } = await supabase.from('interests').select('*').order('name');
@@ -103,7 +132,7 @@ export const useProfileStore = create((set, get) => ({
         .eq('user_id', user.id);
         
       if (error) throw error;
-      set({ userInterests: data.map(ui => ui.interests) });
+      set({ userInterests: data.map(ui => ui.interests), hasFetchedInterests: true });
     } catch (error) {
       console.error("Error fetching user interests:", error);
     }

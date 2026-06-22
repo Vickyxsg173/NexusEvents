@@ -1,7 +1,9 @@
-import React from 'react';
-import { Filter, X, Search } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Filter, X, Search, ChevronDown, ChevronUp } from 'lucide-react';
 
 export default function EventFilters({ filters, setFilters }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFilters(prev => ({
@@ -22,13 +24,24 @@ export default function EventFilters({ filters, setFilters }) {
 
   const hasActiveFilters = Object.values(filters).some(val => val !== '');
 
+  const activeFiltersCount = Object.values(filters).filter(val => val !== '').length;
+
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 mb-8 transition-colors">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center text-slate-900 dark:text-white font-semibold">
+      <div className="flex items-center justify-between mb-2">
+        <button 
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="flex items-center text-slate-900 dark:text-white font-semibold hover:text-brand-600 dark:hover:text-brand-400 transition-colors outline-none"
+        >
           <Filter className="w-5 h-5 mr-2 text-brand-600" />
           Filter Events
-        </div>
+          {activeFiltersCount > 0 && !isExpanded && (
+            <span className="ml-2 bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-400 text-xs py-0.5 px-2 rounded-full">
+              {activeFiltersCount} active
+            </span>
+          )}
+          {isExpanded ? <ChevronUp className="w-4 h-4 ml-2 text-slate-400" /> : <ChevronDown className="w-4 h-4 ml-2 text-slate-400" />}
+        </button>
         {hasActiveFilters && (
           <button 
             onClick={clearFilters}
@@ -38,6 +51,9 @@ export default function EventFilters({ filters, setFilters }) {
           </button>
         )}
       </div>
+
+      {isExpanded && (
+        <div className="mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
 
       {/* Search Bar */}
       <div className="mb-4 relative">
@@ -125,6 +141,8 @@ export default function EventFilters({ filters, setFilters }) {
         </div>
 
       </div>
+        </div>
+      )}
     </div>
   );
 }

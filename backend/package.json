@@ -13,12 +13,18 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@langchain/community": "^1.1.29",
+    "@langchain/core": "^1.2.0",
+    "@langchain/google-genai": "^2.2.0",
     "@supabase/supabase-js": "^2.108.2",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "helmet": "^8.2.0",
-    "node-cron": "^4.2.1"
+    "langchain": "^1.5.0",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

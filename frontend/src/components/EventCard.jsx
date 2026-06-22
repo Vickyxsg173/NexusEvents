@@ -91,13 +91,7 @@ export default function EventCard({ event }) {
                   {event.event_type}
                 </span>
               )}
-              <span className={`px-3 py-1 text-xs font-semibold rounded-full shadow-sm ${
-                event.mode === 'Online' 
-                ? 'bg-green-400/20 text-green-50 backdrop-blur-md' 
-                : 'bg-blue-400/20 text-blue-50 backdrop-blur-md'
-              }`}>
-                {event.mode || 'Online'}
-              </span>
+
             </div>
             <button 
               onClick={(e) => { 

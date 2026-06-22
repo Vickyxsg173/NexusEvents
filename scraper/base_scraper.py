@@ -24,6 +24,29 @@ class BaseScraper(ABC):
         else:
             self.groq_client = None
 
+    def fetch_with_retries(self, url, headers=None, max_retries=3, backoff_factor=2):
+        """
+        Fetch a URL with exponential backoff and retry logic.
+        Handles rate limits and temporary server errors gracefully.
+        """
+        for i in range(max_retries):
+            try:
+                response = requests.get(url, headers=headers, timeout=15)
+                if response.status_code == 200:
+                    return response
+                elif response.status_code in [403, 429, 500, 502, 503, 504]:
+                    print(f"[{self.platform_name}] HTTP {response.status_code} on attempt {i+1}. Retrying in {backoff_factor ** i}s...")
+                    time.sleep(backoff_factor ** i)
+                else:
+                    print(f"[{self.platform_name}] HTTP {response.status_code} received. Not retrying.")
+                    return response
+            except requests.exceptions.RequestException as e:
+                print(f"[{self.platform_name}] Request failed: {e}. Retrying in {backoff_factor ** i}s...")
+                time.sleep(backoff_factor ** i)
+        
+        print(f"[{self.platform_name}] Max retries reached for {url}")
+        return None
+
     @abstractmethod
     def fetch(self):
         """
@@ -65,24 +88,24 @@ class BaseScraper(ABC):
             print(f"[{self.platform_name}] Processing batch {i//batch_size + 1} of {(len(self.raw_data)-1)//batch_size + 1} ({len(batch)} events)...")
             
             prompt = f"""
-You are an expert data normalization service for a tech event discovery platform.
-I will provide you with a JSON array of raw, messy event data scraped from '{self.platform_name}'.
-Some of this data has nested objects like 'address_data', 'registration_data', and 'skills'. 
+You are an expert data extraction service.
+I will provide you with a JSON array of raw event data scraped from '{self.platform_name}'.
+Your job is to cleanly extract this data into a standardized JSON array strictly following this schema without generating or hallucinating any missing details.
 
-Your job is to deeply analyze all nested fields to clean, extract, and normalize this data into a standardized JSON array where each object strictly follows this schema:
+Schema:
 {{
     "title": "string",
-    "description": "string (If the description is empty or too short, generate a professional, compelling 2-sentence description summarizing the event using the title and the provided 'skills'/'work_functions'!)",
-    "organizer": "string (name of the organizer, default to '{self.platform_name}' if unknown)",
-    "event_type": "string (e.g. Hackathon, Webinar, Workshop, Competition)",
+    "description": "string (Extract exactly what is provided. Do NOT generate or invent a description if it is missing)",
+    "organizer": "string (name of the organizer, default to '{self.platform_name}' if missing)",
+    "event_type": "string (e.g. Hackathon, Webinar, Workshop, Competition, Internship)",
     "category": "string (e.g. AI/ML, Web Development, Cybersecurity. Pick the best fit or 'General')",
-    "mode": "string (Determine if it is 'Online' or 'Offline'. If 'address_data' contains a physical city/street, it is 'Offline'!)",
-    "start_date": "ISO8601 string or null (Search all nested fields like 'registration_data' to find the start date if missing!)",
-    "end_date": "ISO8601 string or null (Search all nested fields to find the end date!)",
-    "venue": "string (Extract the full physical address/city from 'address_data', otherwise 'Online')",
-    "registration_link": "string (Must be a valid URL. Fallback to raw url if no specific registration link found)",
-    "cover_image": "string (Valid URL to image/logo from the raw data, or null)",
-    "tags": ["string"] (Extract 3-5 highly relevant tech keywords like 'React', 'AI', 'Blockchain')
+    "mode": "string (Extract as 'Online' or 'Offline'. If address_data has physical location, it is Offline)",
+    "start_date": "ISO8601 string or null (Extract from data, do not guess)",
+    "end_date": "ISO8601 string or null (Extract from data, do not guess)",
+    "venue": "string (Extract physical address/city if provided, otherwise 'Online' if online)",
+    "registration_link": "string (Valid URL from data)",
+    "cover_image": "string (Valid URL from data, or null)",
+    "tags": ["string"] (Extract 3-5 factual keywords directly related to the event text)
 }}
 
 Return ONLY a valid JSON object with a single key 'events' containing the array of objects. Do not include markdown formatting.
@@ -193,15 +216,23 @@ Return ONLY a valid JSON object with a single key 'events' containing the array 
 
     def run(self):
         """
-        Execute the full scraper pipeline.
+        Execute the full scraper pipeline with graceful failure handling.
         """
-        self.fetch()
-        if self._raw_response:
-            self.parse()
+        try:
+            self.fetch()
+            # Handle class attributes that might not be set by all subclasses
+            if hasattr(self, '_raw_response') and not self._raw_response and not self.raw_data:
+                print(f"[{self.platform_name}] Fetch failed or returned empty data.")
+                return
+            
+            if not self.raw_data and hasattr(self, 'parse'):
+                self.parse()
+                
             if self.raw_data:
                 self.normalize_with_ai()
                 self.save_to_db()
             else:
-                print(f"[{self.platform_name}] No raw data to normalize.")
-        else:
-            print(f"[{self.platform_name}] Fetch failed or returned empty data.")
+                print(f"[{self.platform_name}] No raw data parsed/found to normalize.")
+        except Exception as e:
+            print(f"\n[CRITICAL ERROR] {self.platform_name} scraper failed gracefully: {e}")
+            print(f"Pipeline will continue to the next scraper to prevent halting.\n")

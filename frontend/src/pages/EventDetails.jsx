@@ -1,19 +1,71 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEventStore } from '../store/eventStore';
 import { useBookmarkStore } from '../store/bookmarkStore';
-import { Calendar, MapPin, ExternalLink, Tag, Bookmark, ArrowLeft, Users, Trophy } from 'lucide-react';
+import { Calendar, MapPin, ExternalLink, Tag, Bookmark, ArrowLeft, Users, Trophy, CheckCircle2, X, Bell } from 'lucide-react';
+import ApplyReminderModal from '../components/ApplyReminderModal';
+import { supabase } from '../lib/supabase';
+import { useAuthStore } from '../store/authStore';
 
 export default function EventDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentEvent: event, fetchEventById, loading, error } = useEventStore();
   const { savedEventIds, toggleBookmark, fetchSavedEvents } = useBookmarkStore();
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [modalMode, setModalMode] = useState('apply');
+  const [hasApplied, setHasApplied] = useState(false);
+  const [reminderDays, setReminderDays] = useState(null);
+  const { user } = useAuthStore();
 
   useEffect(() => {
     fetchEventById(id);
     fetchSavedEvents();
   }, [id, fetchEventById, fetchSavedEvents]);
+
+  useEffect(() => {
+    const checkApplicationStatus = async () => {
+      if (!user || !id) return;
+      try {
+        const { data, error } = await supabase
+          .from('event_reminders')
+          .select('has_applied, reminder_days')
+          .eq('user_id', user.id)
+          .eq('event_id', id)
+          .maybeSingle();
+          
+        if (data && data.has_applied) {
+          setHasApplied(true);
+          if (data.reminder_days) {
+            setReminderDays(data.reminder_days);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to check application status", err);
+      }
+    };
+    checkApplicationStatus();
+  }, [user, id]);
+
+  const handleApplicationConfirmed = () => {
+    setHasApplied(true);
+  };
+
+  const handleRemoveApplication = async () => {
+    if (!user || !id) return;
+    try {
+      setHasApplied(false); // Optimistic UI update
+      setReminderDays(null);
+      await supabase
+        .from('event_reminders')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('event_id', id);
+    } catch (err) {
+      console.error("Failed to remove application", err);
+      setHasApplied(true); // Revert on failure
+    }
+  };
 
   if (loading) {
     return (
@@ -103,7 +155,7 @@ export default function EventDetails() {
             <div className="flex flex-col sm:flex-row gap-4">
               <button 
                 onClick={() => toggleBookmark(event)}
-                className={`px-6 py-3 rounded-xl font-bold flex items-center justify-center transition-all ${
+                className={`px-8 py-3 h-[52px] rounded-xl font-bold flex items-center justify-center transition-all ${
                   isSaved 
                   ? 'bg-slate-800 text-white hover:bg-slate-700 border border-slate-600' 
                   : 'bg-white text-slate-900 hover:bg-slate-100 shadow-xl'
@@ -113,14 +165,53 @@ export default function EventDetails() {
                 {isSaved ? "Saved" : "Save Event"}
               </button>
               
-              <a 
-                href={event.registration_link || event.source_url || '#'} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="px-8 py-3 rounded-xl font-bold flex items-center justify-center text-white bg-brand-600 hover:bg-brand-500 shadow-xl shadow-brand-600/30 transition-all transform hover:-translate-y-1"
-              >
-                Apply Now <ExternalLink className="w-5 h-5 ml-2" />
-              </a>
+              {hasApplied ? (
+                <div className="flex flex-col gap-2 items-center justify-center">
+                  <button 
+                    onClick={handleRemoveApplication}
+                    className="group w-full h-[52px] px-8 py-3 rounded-xl font-bold flex items-center justify-center text-emerald-700 bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50 hover:bg-red-50 hover:text-red-600 hover:border-red-200 dark:hover:bg-red-900/30 dark:hover:text-red-400 dark:hover:border-red-800/50 transition-all"
+                    title="Click to remove application"
+                  >
+                    <span className="flex items-center group-hover:hidden">
+                      <CheckCircle2 className="w-5 h-5 mr-2" /> Applied
+                    </span>
+                    <span className="hidden items-center group-hover:flex">
+                      <X className="w-5 h-5 mr-2" /> Remove
+                    </span>
+                  </button>
+                  {reminderDays && (
+                    <div className="text-xs text-slate-300 font-medium flex items-center bg-black/40 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10">
+                      <Bell className="w-3.5 h-3.5 mr-1.5 text-brand-400" />
+                      Reminder set for {reminderDays} day{reminderDays === 1 ? '' : 's'} before
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <button 
+                    onClick={() => {
+                      setModalMode('reminder_only');
+                      setShowApplyModal(true);
+                    }}
+                    className="px-8 py-3 h-[52px] rounded-xl font-bold flex items-center justify-center text-brand-600 bg-brand-50 hover:bg-brand-100 dark:bg-brand-900/30 dark:text-brand-400 dark:hover:bg-brand-900/50 border border-brand-200 dark:border-brand-800/50 shadow-xl transition-all"
+                  >
+                    <Bell className="w-5 h-5 mr-2" /> Set Reminder
+                  </button>
+                  <a 
+                    href={event.registration_link || event.source_url || '#'} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    onClick={() => {
+                      setModalMode('apply');
+                      // Wait a split second so the new tab opens first, then show modal
+                      setTimeout(() => setShowApplyModal(true), 500);
+                    }}
+                    className="px-8 py-3 h-[52px] rounded-xl font-bold flex items-center justify-center text-white bg-brand-600 hover:bg-brand-500 shadow-xl shadow-brand-600/30 transition-all transform hover:-translate-y-1"
+                  >
+                    Apply Now <ExternalLink className="w-5 h-5 ml-2" />
+                  </a>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -215,6 +306,20 @@ export default function EventDetails() {
         </div>
         
       </div>
+
+      <ApplyReminderModal 
+        event={event} 
+        isOpen={showApplyModal} 
+        mode={modalMode}
+        onClose={() => setShowApplyModal(false)} 
+        onApplicationConfirmed={handleApplicationConfirmed}
+        onReminderSaved={(days) => {
+          setReminderDays(days);
+          if (modalMode === 'reminder_only' && !isSaved) {
+            toggleBookmark(event);
+          }
+        }}
+      />
     </div>
   );
 }
