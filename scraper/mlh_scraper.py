@@ -7,7 +7,7 @@ class MLHScraper(BaseScraper):
     def __init__(self):
         super().__init__(
             platform_name="Major League Hacking (MLH)",
-            source_url="https://mlh.io/seasons/2025/events"
+            source_url="https://mlh.io/seasons/2026/events"
         )
         self.headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"

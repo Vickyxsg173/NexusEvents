@@ -7,10 +7,12 @@ class GDGScraper(BaseScraper):
     def __init__(self):
         super().__init__(
             platform_name="Google Developer Groups (GDG)",
-            source_url="https://gdg.community.dev/events/"
+            source_url="https://gdg.community.dev/api/event/"
         )
         self.headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Accept": "application/json",
+            "Referer": "https://gdg.community.dev/events/"
         }
 
     def fetch(self):
@@ -19,44 +21,40 @@ class GDGScraper(BaseScraper):
 
     def parse(self):
         if not self._raw_response: return
-        print(f"[{self.platform_name}] Parsing HTML data...")
-        soup = BeautifulSoup(self._raw_response.text, 'html.parser')
+        print(f"[{self.platform_name}] Parsing JSON data...")
         
-        # GDG usually has an inline script or div with data-react-props
-        script_tag = soup.find('script', id='__NEXT_DATA__')
-        if script_tag:
-            try:
-                data = json.loads(script_tag.string)
-                events = data.get('props', {}).get('pageProps', {}).get('events', [])
-                for ev in events:
-                    title = ev.get('title', '')
-                    if title:
-                        raw_event = {
-                            "title": title,
-                            "description": ev.get('description', ''),
-                            "url": "https://gdg.community.dev" + ev.get('url', ''),
-                            "start_date": ev.get('start_date', ''),
-                            "end_date": ev.get('end_date', ''),
-                            "address_data": ev.get('venue', {}),
-                            "event_type": "Meetup/Workshop",
-                            "organizer": "GDG"
-                        }
-                        self.raw_data.append(raw_event)
-            except Exception as e:
-                print(f"[{self.platform_name}] Error parsing JSON: {e}")
-        else:
-            # Fallback to HTML parsing if not NextJS
-            for el in soup.find_all('a', class_='picture-bg'):
-                title = el.get('title', 'GDG Event')
-                url = el.get('href', '')
-                if url.startswith('/'): url = "https://gdg.community.dev" + url
-                raw_event = {
-                    "title": title,
-                    "url": url,
-                    "event_type": "Meetup",
-                    "organizer": "GDG"
-                }
-                self.raw_data.append(raw_event)
+        try:
+            data = self._raw_response.json()
+            events = data.get('results', [])
+            
+            for ev in events:
+                title = ev.get('title', '')
+                if title:
+                    url = ev.get('url', '')
+                    if url and not url.startswith('http'):
+                        url = "https://gdg.community.dev" + url
+                    
+                    # Convert GDG event mode format
+                    mode = "Offline"
+                    if ev.get('event_type_title') == 'Virtual':
+                        mode = "Online"
+                        
+                    raw_event = {
+                        "title": title,
+                        "description": ev.get('description_short', ''),
+                        "url": url,
+                        "start_date": ev.get('start_date', ''),
+                        "end_date": ev.get('end_date', ''),
+                        "cover_image": ev.get('picture', {}).get('url', ''),
+                        "mode": mode,
+                        "address_data": {"raw": ev.get('city', '')},
+                        "event_type": "Meetup/Workshop",
+                        "organizer": "GDG"
+                    }
+                    self.raw_data.append(raw_event)
+                    
+        except Exception as e:
+            print(f"[{self.platform_name}] Error parsing JSON: {e}")
                 
         print(f"[{self.platform_name}] Extracted {len(self.raw_data)} raw events.")
 
