@@ -6,17 +6,19 @@ import { useAuthStore } from './store/authStore';
 import Navbar from './components/Navbar';
 import Loader from './components/Loader';
 
-// Lazy load route components
+// Lazy load heavy or rarely used components
 const Login = lazy(() => import('./pages/Login'));
 const Signup = lazy(() => import('./pages/Signup'));
 const Landing = lazy(() => import('./pages/Landing'));
-const Dashboard = lazy(() => import('./pages/Dashboard'));
-const Discover = lazy(() => import('./pages/Discover'));
-const Profile = lazy(() => import('./pages/Profile'));
-const SavedEvents = lazy(() => import('./pages/SavedEvents'));
 const EventDetails = lazy(() => import('./pages/EventDetails'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+
+// Eagerly load core pages to prevent routing delay
+import Dashboard from './pages/Dashboard';
+import Discover from './pages/Discover';
+import Profile from './pages/Profile';
+import SavedEvents from './pages/SavedEvents';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {

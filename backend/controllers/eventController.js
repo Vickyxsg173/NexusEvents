@@ -117,12 +117,15 @@ Event Title: ${newEvent.title || 'Unknown'}
 Organization: ${newEvent.organizer || 'Unknown'}
 Category: ${newEvent.category || 'Tech'}
 Location/Mode: ${newEvent.mode || 'Online'}
+Source Platform: ${newEvent.source_platform || 'Unknown'}
 Description: ${newEvent.description || ''}
         `.trim();
 
         const metadata = {
           event_id: newEvent.id,
           mode: newEvent.mode || 'Online',
+          source_platform: newEvent.source_platform || 'Unknown',
+          organizer: newEvent.organizer || 'Unknown',
           start_date: newEvent.start_date,
           tags: tags || []
         };

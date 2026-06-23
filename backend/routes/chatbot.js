@@ -40,6 +40,7 @@ router.post('/search', async (req, res) => {
       Available metadata fields for filtering:
       - mode: Can only be exactly "Online" or "Offline". 
         (Rule: If they ask for events that are NOT online, or specifically "Offline" or "In-Person", set mode to "Offline".)
+      - organizer: Can only be an exact match for one of these organizers: "Alibaba Cloud", "UiPath", "Major League Hacking (MLH)", "arm", "Amazon", "XPRIZE", "Y Combinator", "Salesforce", "Unstop", "Microsoft Reactor", "HackerEarth", "Devfolio", "reddit", "GitHub Internships (Simplify)", "Google Developer Groups (GDG)", "GitLab", "GitHub Internships", "AWS Events", "GenAI Fund", "CNCF", "Meetup".
       
       Return a JSON object with:
       - "semantic_query": The core meaning of their search without the strict constraints (e.g. "artificial intelligence hackathon").

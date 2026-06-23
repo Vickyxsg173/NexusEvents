@@ -152,8 +152,8 @@ export default function Discover() {
         </div>
       )}
 
-      {/* RAG Chatbot UI */}
-      <Chat />
+      {/* RAG Chatbot UI (Development Only) */}
+      {import.meta.env.DEV && <Chat />}
     </div>
   );
 }

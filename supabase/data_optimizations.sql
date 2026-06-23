@@ -82,7 +82,7 @@ BEGIN
             -- Standard Filters
             AND (p_category IS NULL OR p_category = '' OR e.category ILIKE '%' || p_category || '%')
             AND (p_mode IS NULL OR p_mode = '' OR e.mode ILIKE '%' || p_mode || '%')
-            AND (p_source IS NULL OR p_source = '' OR e.source_platform = p_source)
+            AND (p_source IS NULL OR p_source = '' OR e.organizer = p_source)
             AND (p_type IS NULL OR p_type = '' OR e.event_type ILIKE '%' || p_type || '%')
             
             -- Search Text
