@@ -158,20 +158,21 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 text-center mb-6">
           <p className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Integrating Opportunities From</p>
         </div>
-        <div className="flex justify-center flex-wrap gap-8 md:gap-16 opacity-70">
-          {/* Mock Logos - using styled text for now */}
-          {['Devpost', 'Devfolio', 'Unstop', 'HackerEarth', 'MLH', 'Meetup', 'AWS', 'Google', 'Microsoft', 'Hack2Skill', 'GitHub', 'Y Combinator', 'CNCF', 'Linux Found.', 'Govt & Research', 'AICTE', 'ISRO', 'DRDO'].map((platform, idx) => (
-            <motion.div 
-              key={idx}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="flex items-center text-xl md:text-2xl font-extrabold text-slate-400 dark:text-slate-500 grayscale hover:grayscale-0 hover:text-cyan-500 transition-all duration-300"
-            >
-              <Code className="w-6 h-6 mr-2 opacity-50" /> {platform}
-            </motion.div>
-          ))}
+        <div className="relative w-full overflow-hidden">
+          <div className="flex w-max animate-marquee opacity-70 hover:opacity-100 transition-opacity duration-500 py-4">
+            {[...['Devpost', 'Devfolio', 'Unstop', 'HackerEarth', 'MLH', 'Meetup', 'AWS', 'Google', 'Microsoft', 'Hack2Skill', 'GitHub', 'Y Combinator', 'CNCF', 'Linux Found.', 'Govt & Research', 'AICTE', 'ISRO', 'DRDO'], ...['Devpost', 'Devfolio', 'Unstop', 'HackerEarth', 'MLH', 'Meetup', 'AWS', 'Google', 'Microsoft', 'Hack2Skill', 'GitHub', 'Y Combinator', 'CNCF', 'Linux Found.', 'Govt & Research', 'AICTE', 'ISRO', 'DRDO']].map((platform, idx) => (
+              <div 
+                key={idx}
+                className="flex items-center mx-8 md:mx-12 text-xl md:text-2xl font-extrabold text-slate-400 dark:text-slate-500 grayscale hover:grayscale-0 hover:text-cyan-500 transition-all duration-300 whitespace-nowrap cursor-default"
+              >
+                <Code className="w-6 h-6 mr-2 opacity-50" /> {platform}
+              </div>
+            ))}
+          </div>
+          
+          {/* Subtle edge fade overlays */}
+          <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-slate-50 dark:from-slate-900 to-transparent pointer-events-none"></div>
+          <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-slate-50 dark:from-slate-900 to-transparent pointer-events-none"></div>
         </div>
       </div>
 
