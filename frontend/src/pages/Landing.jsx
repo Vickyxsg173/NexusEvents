@@ -214,18 +214,18 @@ export default function Landing() {
                       viewport={{ once: true, margin: "-50px" }}
                       transition={{ delay: idx * 0.1, type: "spring", stiffness: 120, damping: 15 }}
                       whileHover={{ y: -10, scale: 1.05 }}
-                      className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300"
+                      className="relative bg-white/60 dark:bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-white/10 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300"
                     >
+                      {import.meta.env.PROD && (feature.title === "Interactive Chat Search" || feature.title === "Advanced Filtering") && (
+                        <span className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded border border-amber-500/20 whitespace-nowrap">
+                          In Progress
+                        </span>
+                      )}
                       <div className={`w-14 h-14 ${feature.bg} rounded-xl flex items-center justify-center mb-6`}>
                         <feature.icon className={`w-7 h-7 ${feature.color}`} />
                       </div>
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2 flex-wrap">
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">
                         {feature.title}
-                        {import.meta.env.PROD && (feature.title === "Interactive Chat Search" || feature.title === "Advanced Filtering") && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded border border-amber-500/20 whitespace-nowrap">
-                            In Progress
-                          </span>
-                        )}
                       </h3>
                       <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{feature.desc}</p>
                     </motion.div>
