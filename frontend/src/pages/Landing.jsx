@@ -219,7 +219,14 @@ export default function Landing() {
                       <div className={`w-14 h-14 ${feature.bg} rounded-xl flex items-center justify-center mb-6`}>
                         <feature.icon className={`w-7 h-7 ${feature.color}`} />
                       </div>
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{feature.title}</h3>
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2 flex-wrap">
+                        {feature.title}
+                        {import.meta.env.PROD && (feature.title === "Interactive Chat Search" || feature.title === "Advanced Filtering") && (
+                          <span className="text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded border border-amber-500/20 whitespace-nowrap">
+                            In Progress
+                          </span>
+                        )}
+                      </h3>
                       <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{feature.desc}</p>
                     </motion.div>
                   ))}
