@@ -72,7 +72,6 @@ export default function EventCard({ event }) {
       onClick={() => navigate(`/event/${event.id}`)}
       whileHover={{ y: -5, scale: 1.02 }}
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
-      style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 400px' }}
       className="group bg-white/50 dark:bg-slate-900/40 backdrop-blur-xl rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.05)] hover:shadow-[0_0_25px_rgba(6,182,212,0.2)] border border-slate-200/50 dark:border-white/10 overflow-hidden flex flex-col h-full cursor-pointer transition-colors"
     >
       
