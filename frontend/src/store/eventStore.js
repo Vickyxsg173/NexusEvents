@@ -2,8 +2,7 @@ import { create } from 'zustand'
 import axios from 'axios'
 import { useAuthStore } from './authStore'
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-const API_URL = BASE_URL.endsWith('/api/events') ? BASE_URL : `${BASE_URL}/api/events`;
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/events'
 
 export const useEventStore = create((set) => ({
   events: [],
